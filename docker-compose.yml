@@ -1,21 +1,31 @@
-# set up the nginx container
-nginx:
-  image: nginx
-  ports:
-    - "80:80"
-  volumes:
-    - ./sites-available/default:/etc/nginx/sites-available/default
-    - ./sites-available/default:/etc/nginx/sites-enabled/default
+version: '2'
 
-    - ./logs/nginx-error.log:/var/log/nginx/error.log
-    - ./logs/nginx-access.log:/var/log/nginx/access.log
+services:
+  # set up the nginx container
+  nginx:
+    image: nginx:latest
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./sites-available/default:/etc/nginx/sites-available/default
+      - ./sites-available/default:/etc/nginx/sites-enabled/default
 
-    - ./public_html:/var/www/html
+      - ./logs/nginx-error.log:/var/log/nginx/error.log
+      - ./logs/nginx-access.log:/var/log/nginx/access.log
 
-# set up the php container
-php:
-  image: php:7.4-fpm
-  ports:
-    - "9000:9000"
-  volumes:
-    - ./public_html:/var/www/html
+      - ./public_html:/var/www/html
+    networks:
+      - code-network
+  # set up the php container
+  php:
+    image: php:fpm
+    restart: always
+    volumes:
+      - ./public_html:/var/www/html
+    networks:
+      - code-network
+
+networks:
+  code-network:
+      driver: bridge
