@@ -6,10 +6,10 @@ services:
     image: nginx:latest
     restart: always
     ports:
-      - "8080:80"
+      - "80:80"
     volumes:
-      - ./sites-available/default:/etc/nginx/sites-available/default
-      - ./sites-available/default:/etc/nginx/sites-enabled/default
+      - ./sites-available/default.conf:/etc/nginx/sites-available/default.conf
+      - ./sites-available/default.conf:/etc/nginx/conf.d/default.conf
 
       - ./logs/nginx-error.log:/var/log/nginx/error.log
       - ./logs/nginx-access.log:/var/log/nginx/access.log
